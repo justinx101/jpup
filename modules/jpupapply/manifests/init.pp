@@ -1,13 +1,8 @@
-	#$linuxPuppetPath = "/opt/puppetlabs/bin:/usr/bin"
-	#$linuxPrivateKey = "/home/justin/Dropbox/homepupkey.priv"
 class jpupapply {
-	#include localconfig
-
 	if 'nux' in $kernel {
 		notice ("This is a Linux machine")
 
 		file { '/usr/local/bin/jpupapply':
-#			source => 'puppet:///modules/jpupapply/jpupapply.sh',
 			content => template('jpupapply/jpupapply.sh.erb'),
 			mode => '0755',
 		}

@@ -40,7 +40,7 @@ repository then forget about it.  Next time you power up those machines jpup wil
 automatically download your repository updates and apply the new .vimrc without
 you having to do anything else.
 
-That's a very simple example and you may not think it's worth the hassle of using
+That's a very simple example and you may not think it's worth the trouble of using
 Puppet/jpup just for one file.  But of course it won't be just one file - there
 will be others and maybe you want to make sure Firefox is installed or you want
 to make sure telnet isn't running...
@@ -49,7 +49,7 @@ Remember: your configuration is held in your central repo, so when you re-instal
 the OS on your laptop or buy a new computer you don't have to go digging around
 for all those config files etc. Just install Puppet and jpup and off you go.
 
-## Process Overview
+## Process 
 1.  Download or clone this jpup repo
 2.  Create your own repo in your Version Control System of choice (only tested 
     with GitHub so far)
@@ -64,6 +64,6 @@ for all those config files etc. Just install Puppet and jpup and off you go.
     /usr/local/bin/jpupapply which will update your local repo(s) automatically
     before running a puppet apply.
 
-## Pre-requisites
+## Prerequisites
 Each machine requires Puppet and Git (or whatever VCS you are using)
 

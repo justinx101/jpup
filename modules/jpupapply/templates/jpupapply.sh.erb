@@ -35,7 +35,6 @@ puppet apply "${jpupBaseDir}"/manifests/ --modulepath="${jpupBaseDir}"/modules/
 <%=@descLnxUseJpupOnly%>
 useJpupOnly=<%=@lnxUseJpupOnly%>
 if [[ $useJpupOnly -eq 1 ]]; then
-	echo "Exiting !!!!!!"
 	exit
 fi
 
