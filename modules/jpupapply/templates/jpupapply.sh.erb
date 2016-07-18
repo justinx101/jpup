@@ -1,0 +1,50 @@
+#!/bin/bash
+set -o nounset
+
+<%=@descLnxPuppetPath%>
+puppetPath=<%=@lnxPuppetPath%>
+
+PATH="${PATH}:${puppetPath}"
+
+<%=@descLnxPrivateKey%>
+privateKey=<%=@lnxPrivateKey%>
+
+<%=@descLnxPullCmd%>
+lnxPullCmd=<%=@lnxPullCmd%>
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Make sure jpup repo is up to date then puppet apply it
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+<%=@descLnxJpupBaseDir%>
+jpupBaseDir=<%=@lnxJpupBaseDir%>
+
+# Pull the latest version from your VCS authenticating with your private key
+cd "${jpupBaseDir}"
+/usr/bin/ssh-agent /bin/bash -c "/usr/bin/ssh-add ${privateKey};${lnxPullCmd}"
+
+# Puppet apply the jpup manifest (note not applying site.pp explicitly as we 
+# want to read all the files in manifests directory).
+puppet apply "${jpupBaseDir}"/manifests/ --modulepath="${jpupBaseDir}"/modules/
+
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Make sure the repo containing your personal puppet manifests is up to date 
+# then puppet apply it. 
+# IMPORTANT: If lnxUseJpupOnly=1 in localconfig then this section is skipped.
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+<%=@descLnxUseJpupOnly%>
+useJpupOnly=<%=@lnxUseJpupOnly%>
+if [[ $useJpupOnly -eq 1 ]]; then
+	echo "Exiting !!!!!!"
+	exit
+fi
+
+<%=@descLnxMyBaseDir%>
+myBaseDir=<%=@lnxMyBaseDir%>
+
+# Pull the latest version from your VCS authenticating with your private key
+cd "${myBaseDir}"
+/usr/bin/ssh-agent /bin/bash -c "/usr/bin/ssh-add ${privateKey};${lnxPullCmd}"
+
+# Puppet apply your main manifest 
+puppet apply "${myBaseDir}"/manifests/ --modulepath="${myBaseDir}"/modules/

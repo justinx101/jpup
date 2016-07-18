@@ -1,0 +1,63 @@
+#!/bin/bash
+set -o nounset
+
+
+function interactive {
+cat << EOF
+
+*************************************************************************
+************************ LINUX MANUAL RUN OF JPUP ***********************
+*************************************************************************
+
+You will need to run this the first time you install jpup on a machine.
+
+After that a cron job will kick off jpup runs automatically.
+However you can always run this again if something goes wrong.
+
+You must make sure the Linux variables in jpup/manifests/localconfig.pp 
+(i.e. those that start with '\$lnx') reflect your environment. For example 
+if your jpup repo is not located at /root/jpup you will need to edit the 
+variable \$lnxJpupBaseDir accordingly. Each variable has a description 
+preceeding it which should make it's purpose clear.
+
+If you have a separate repo its manifests will not be applied - this
+script only applies the jpup manifests. The manifests in your separate
+repo will get applied by jpupapply when the cron job kicks in.
+
+Make sure your repo is configured to communicate with the remote repo via
+ssh. If using Git check this with: git config --get remote.origin.url
+
+You can run this script non-interactively with $0 -n
+
+
+***** IMPORTANT ** IMPORTANT ** IMPORTANT ** IMPORTANT ** IMPORTANT *****
+
+Have you made sure the Linux variables in manifests/localconfig.pp
+reflect your environment? [y/N] 
+
+EOF
+read -s -n1 response 
+case $response in
+	[yY]) 
+		# Puppet apply the jpup manifest
+		printf "Starting manual jpup run.\n"
+		apply
+		printf "\n"
+       	;;
+   	*)
+		printf "No action taken.\n\n"
+       	;;
+esac
+}
+
+function apply {
+	date > linuxManualRun.log
+	puppet apply manifests/ --modulepath=modules/ | tee linuxManualRun.log
+}
+
+# MAIN
+if [[ $# -gt 0 && $1 == "-n" ]]; then
+	apply
+else
+	interactive
+fi
