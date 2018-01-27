@@ -18,7 +18,7 @@ You must make sure the Linux variables in jpup/manifests/localconfig.pp
 (i.e. those that start with '\$lnx') reflect your environment. For example 
 if your jpup repo is not located at /root/jpup you will need to edit the 
 variable \$lnxJpupBaseDir accordingly. Each variable has a description 
-preceeding it which should make it's purpose clear.
+preceeding it which should make its purpose clear.
 
 If you have a separate repo its manifests will not be applied - this
 script only applies the jpup manifests. The manifests in your separate
